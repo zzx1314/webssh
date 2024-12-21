@@ -1,5 +1,8 @@
 import ipaddress
 import re
+import base64
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import unpad
 
 try:
     from types import UnicodeType
@@ -145,3 +148,14 @@ def parse_origin_from_url(url):
         netloc = parsed.netloc
 
     return '{}://{}'.format(scheme, netloc)
+
+
+def decrypt_aes_cbc(ciphertext, key, iv):
+    # 解码 base64 编码的密文
+    encrypted_data = base64.b64decode(ciphertext)
+    cipher = AES.new(key, AES.MODE_CBC, iv)
+    # 解密数据
+    decrypted_padded = cipher.decrypt(encrypted_data)
+    # 去除填充
+    decrypted_data = unpad(decrypted_padded, AES.block_size)
+    return decrypted_data.decode('utf-8')

@@ -1,12 +1,25 @@
 import unittest
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad
 
 from webssh.utils import (
     is_valid_ip_address, is_valid_port, is_valid_hostname, to_str, to_bytes,
-    to_int, is_ip_hostname, is_same_primary_domain, parse_origin_from_url
+    to_int, is_ip_hostname, is_same_primary_domain, parse_origin_from_url, decrypt_aes_cbc
 )
 
 
 class TestUitls(unittest.TestCase):
+
+    def setUp(self):
+        # 设置密钥和 IV
+        self.key = b'quijklslodfdssuf'  # 16 字节密钥
+        self.iv = b'kuijklsywfdssufe'  # 16 字节 IV
+
+    def test_decrypt_aes_cbc(self):
+        encrypted_data = "8pTsWZ1mxQEDF93RiwCOFA=="
+        # 解密数据
+        decrypted_data = decrypt_aes_cbc(encrypted_data, self.key, self.iv)
+        print('Decrypted data:', decrypted_data)
 
     def test_to_str(self):
         b = b'hello'
