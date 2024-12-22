@@ -15,7 +15,7 @@ from tornado.process import cpu_count
 from webssh.utils import (
     is_valid_ip_address, is_valid_port, is_valid_hostname, to_bytes, to_str,
     to_int, to_ip_address, UnicodeType, is_ip_hostname, is_same_primary_domain,
-    is_valid_encoding
+    is_valid_encoding, decrypt_aes_cbc
 )
 from webssh.worker import Worker, recycle_worker, clients
 
@@ -60,6 +60,10 @@ class SSHClient(paramiko.SSHClient):
         self._transport.auth_interactive(username, handler)
 
     def _auth(self, username, password, pkey, *args):
+        self.key = b'quijklslodfdssuf'  # 16 字节密钥
+        self.iv = b'kuijklsywfdssufe'  # 16 字节 IV
+        # 解密数据
+        password = decrypt_aes_cbc(password, self.key, self.iv)
         self.password = password
         saved_exception = None
         two_factor = False

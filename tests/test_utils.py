@@ -16,7 +16,7 @@ class TestUitls(unittest.TestCase):
         self.iv = b'kuijklsywfdssufe'  # 16 字节 IV
 
     def test_decrypt_aes_cbc(self):
-        encrypted_data = "8pTsWZ1mxQEDF93RiwCOFA=="
+        encrypted_data = "LrI5THbts5pc77MhXRXkaw=="
         # 解密数据
         decrypted_data = decrypt_aes_cbc(encrypted_data, self.key, self.iv)
         print('Decrypted data:', decrypted_data)
